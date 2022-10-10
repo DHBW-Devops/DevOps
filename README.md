@@ -5,3 +5,4 @@ Repository for the devops lecture of the fifth semester
 - Lasse Henrich
 - Benjamin Bilal Bhatti
 - Linus Baumann
+- Jonas Haberstroh
