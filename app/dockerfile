@@ -1,0 +1,15 @@
+FROM python:3.10-slim
+
+EXPOSE 5000
+
+ENV PYTHONDONTWRITEBYTECODE = 1
+
+# INSTALL DEPENDENCIES
+COPY ./app/requirements.txt .
+RUN python -m pip install -r ./requirements.txt
+
+# COPY SOURCECODE
+WORKDIR /app
+COPY ./app /app
+
+CMD ["python", "-m", "flask", "run", "--host=0.0.0.0"]
