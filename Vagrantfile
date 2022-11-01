@@ -12,10 +12,7 @@ Vagrant.configure("2") do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://vagrantcloud.com/search.
-  config.vm.box = "ubuntu/trusty64"
-
-  config.vm.network "forwarded_port", guest: 5000, host: 5000
-
+  config.vm.box = "ubuntu/focal64"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -66,11 +63,16 @@ Vagrant.configure("2") do |config|
   # Enable provisioning with a shell script. Additional provisioners such as
   # Ansible, Chef, Docker, Puppet and Salt are also available. Please see the
   # documentation for more information about their specific syntax and use.
+  # config.vm.provision "shell", inline: <<-SHELL
+  #   apt-get update
+  #   apt-get install -y apache2
+  # SHELL
+  config.vm.network "forwarded_port", guest: 5000, host: 8080
   config.vm.provision "shell", inline: <<-SHELL
     apt-get update
     apt-get install -y python3-pip
-    cd app
-    pip install -r ./requirments.txt
-    flask run
+    pip install -r /vagrant/app/app/requirements.txt
+    export FLASK_APP=/vagrant/app/app/app.py
+    flask run --host 0.0.0.0
   SHELL
 end
