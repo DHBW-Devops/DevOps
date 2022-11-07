@@ -68,10 +68,13 @@ Vagrant.configure("2") do |config|
   #   apt-get install -y apache2
   # SHELL
   config.vm.network "forwarded_port", guest: 5000, host: 8080
+  config.vm.provision :ansible do |ansible|
+    ansible.playbook = "ansible-provision/playbook.yml"
+  end
   config.vm.provision "shell", inline: <<-SHELL
-    apt-get update
-    apt-get install -y python3-pip
-    pip install -r /vagrant/app/app/requirements.txt
+    #apt-get update
+    #apt-get install -y python3-pip
+    #pip install -r /vagrant/app/app/requirements.txt
     export FLASK_APP=/vagrant/app/app/app.py
     flask run --host 0.0.0.0
   SHELL
