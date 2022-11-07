@@ -75,7 +75,7 @@ Vagrant.configure("2") do |config|
     #apt-get update
     #apt-get install -y python3-pip
     #pip install -r /vagrant/app/app/requirements.txt
-    export FLASK_APP=/vagrant/app/app/app.py
-    flask run --host 0.0.0.0
+    #export FLASK_APP=/vagrant/app/app/app.py
+    #flask run --host 0.0.0.0
   SHELL
 end
