@@ -1,0 +1,11 @@
+- name: Playbook
+  become_user: root
+  tasks:
+    - name: install pip
+      apt-get:
+        name: pip3
+        state: latest
+    - name: install flask
+      service:
+        name: flask
+        state: latest
