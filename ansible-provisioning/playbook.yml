@@ -1,11 +1,14 @@
 - name: Playbook
   become_user: root
   tasks:
+  - name: update dependcies
+      ap-get:
+        update: yes
     - name: install pip
       apt-get:
         name: pip3
         state: latest
     - name: install flask
-      service:
+      apt-get:
         name: flask
         state: latest
