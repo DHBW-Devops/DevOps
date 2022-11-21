@@ -15,7 +15,7 @@ provider "azurerm" {
 
 resource "azurerm_resource_group" "rg-devops-flask-app" {
     name = "DevOps-Projekt-Automated"
-    location = "eastus2"
+    location = var.region
 }
 
 resource "azurerm_service_plan" "flask-app-service-plan" {
@@ -29,13 +29,16 @@ resource "azurerm_service_plan" "flask-app-service-plan" {
 resource "azurerm_linux_web_app" "app" {
     name = "website-devops-a"
     resource_group_name = azurerm_resource_group.rg-devops-flask-app.name
-    location = "eastus2"
+    location = azurerm_resource_group.rg-devops-flask-app.location
     service_plan_id = azurerm_service_plan.flask-app-service-plan.id
     site_config {
         always_on = false
         application_stack {
             docker_image = "inf20079/dhbw_devops"
             docker_image_tag = "latest"
+        }
+        app_settings = {
+            "WEBSITES_PORT" = "5000"
         }
     }
 }
