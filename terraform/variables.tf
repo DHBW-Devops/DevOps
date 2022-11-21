@@ -1,3 +1,3 @@
-#variable "region" {
-#    type = "test"
-#}
+variable "region" {
+    type = string
+}
