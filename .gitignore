@@ -138,8 +138,12 @@ dmypy.json
 ### Vagrant Patch ###
 *.box
 
-###Terraform ###
+### Terraform ###
 terraform/.terraform
 *.tfstate
 *.backup
 *.hcl
+
+### Sonarqube ###
+**/.scannerwork
+
