@@ -21,6 +21,6 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          file: ./Dockerfile
+          file: ./app/dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/dhbw_devops:latest,${{ secrets.DOCKERHUB_USERNAME}}/dhbw_devops:${{ github.sha }}
