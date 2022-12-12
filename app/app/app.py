@@ -42,4 +42,4 @@ def image_loaded():
     print("fasdf")
 
 if __name__ == '__main__':
-    app.run()
+    app.run()#100 - (avg(irate(node_cpu_seconds_total{mode="idle"}[30m])) * 100)
