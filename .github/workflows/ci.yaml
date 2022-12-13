@@ -45,9 +45,9 @@ jobs:
         -Dsonar.python.pydocstyle.enabled=true
     - name: Fail pipeline if code quality thresholds are not met
       run: |
-      sonar-scanner-report
-      --format=json
-      --output-file=sonar-report.json
+        sonar-scanner-report
+        --format=json
+        --output-file=sonar-report.json
       id: sonar-report
     - name: Parse Sonarqube report
       uses: jbake/json-parse-action@v1.0.1
