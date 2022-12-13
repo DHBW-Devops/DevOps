@@ -25,16 +25,26 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Install SonarQube Scanner
-      run: |
-        pip install sonar-tools
-    - name: Set SonarQube properties
-      run: |
-        echo "sonar.host.url=http://localhost:9000" >> sonar-scanner.properties
-        echo "sonar.login=${{ secrets.SONAR_TOKEN }}" >> sonar-scanner.properties
-    - name: Test Python application with SonarQube
-      run: sonar-scanner
+      - uses: actions/checkout@v2
+      - name: Start SonarQube
+        run: |
+          # Start SonarQube
+          wget -O sq-scan.jar https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.5.0.2216-linux.zip
+          unzip sq-scan.jar
+          sonar-scanner-4.5.0.2216-linux/bin/sonar-scanner
+      - name: Run SonarQube Scan
+        run: |
+          # Set up the environment variables
+          # Replace the following values with your own SonarQube server URL and token
+          export SONAR_HOST_URL=http://localhost:9000
+          export SONAR_TOKEN=${{ secrets.SONAR_TOKEN }}
+
+          # Run the SonarQube scan
+          sonar-scanner-4.5.0.2216-linux/bin/sonar-scanner \
+            -Dsonar.projectKey=DevOps-WebApp \
+            -Dsonar.sources=./../../app/app \
+            -Dsonar.python.coverage.reportPath=coverage.xml \
+            -Dsonar.python.xunit.reportPath=xunit.xml
   sonarqube:
     name: Build
     needs: test
@@ -95,9 +105,3 @@ jobs:
 #    - name: Fail pipeline if number of bugs is above threshold
 #      if: ${{ steps.sonar-parsed.outputs.bugs > 3 }}
 #      run: exit 1
-#- name: Analyse mit Sonarqube
-#  uses: sonarsource/sonarqube-scanner-github-action@v1
-#  with:
-#    sonar-host: http://<your_local_ip_address>:<sonarqube_port>
-#    sonar-project-key: <your_project_key>
-#    sonar-project-name: <your_project
