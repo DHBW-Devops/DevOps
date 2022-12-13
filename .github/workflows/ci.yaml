@@ -22,9 +22,23 @@ jobs:
       - name: Run Tests
         run: |
           python -m pytest -v
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install SonarQube Scanner
+      run: |
+        apt-get update
+        apt-get install sonar-scanner
+    - name: Set SonarQube properties
+      run: |
+        echo "sonar.host.url=http://localhost:9000" >> sonar-scanner.properties
+        echo "sonar.login=${{ secrets.SONAR_TOKEN }}" >> sonar-scanner.properties
+    - name: Test Python application with SonarQube
+      run: sonar-scanner
   sonarqube:
     name: Build
-    needs: build-and-test
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -82,3 +96,26 @@ jobs:
 #    - name: Fail pipeline if number of bugs is above threshold
 #      if: ${{ steps.sonar-parsed.outputs.bugs > 3 }}
 #      run: exit 1
+- name: Analyse mit Sonarqube
+  uses: sonarsource/sonarqube-scanner-github-action@v1
+  with:
+    sonar-host: http://<your_local_ip_address>:<sonarqube_port>
+    sonar-project-key: <your_project_key>
+    sonar-project-name: <your_project
+name: Test Python application with SonarQube
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install SonarQube Scanner
+      run: |
+        apt-get update
+        apt-get install sonar-scanner
+    - name: Set SonarQube properties
+      run: |
+        echo "sonar.host.url=http://localhost:9000" >> sonar-scanner.properties
+        echo "sonar.login=${{ secrets.SONAR_TOKEN }}" >> sonar-scanner.properties
+    - name: Test Python application with SonarQube
+      run: sonar-scanner
