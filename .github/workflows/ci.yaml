@@ -28,8 +28,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: Install SonarQube Scanner
       run: |
-        apt-get update
-        apt-get install sonar-scanner
+        pip install sonar-tools
     - name: Set SonarQube properties
       run: |
         echo "sonar.host.url=http://localhost:9000" >> sonar-scanner.properties
