@@ -52,7 +52,7 @@ jobs:
     - name: Parse Sonarqube report
       uses: jbake/json-parse-action@v1.0.1
       with:
-      json_file: sonar-report.json
+        json_file: sonar-report.json
       id: sonar-parsed
     - name: Fail pipeline if code coverage is below threshold
       if: ${{ steps.sonar-parsed.outputs.coverage < 80 }}
