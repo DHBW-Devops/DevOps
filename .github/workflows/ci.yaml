@@ -7,7 +7,7 @@ on:
     branches: ["main"]
 
 jobs:
-  build: #should we split the build and test? 
+  build and test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -22,3 +22,51 @@ jobs:
       - name: Run Tests
         run: |
           python -m pytest -v
+  start sonarqube:
+    runs-on: ubuntu-latest
+    needs: build and test
+    steps:
+    - uses: actions/checkout@v2
+    - name: Login to Azure
+      uses: azure/login@v2
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS_SONARQUBE }}
+    - name: Start App Service
+      run: |
+        az webapp start --name sonarqube-instance --resource-group DevOps-Projekt-Automated
+  run sonarqube tests:
+    runs-on: ubuntu-latest
+    needs: start sonarqube
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run static code analysis
+        run: |
+        sonar-scanner
+        -Dsonar.projectKey=my_project
+        -Dsonar.sources=.
+        -Dsonar.python.pylint.enabled=true
+        -Dsonar.python.pycodestyle.enabled=true
+        -Dsonar.python.pydocstyle.enabled=true
+      - name: Fail pipeline if code quality thresholds are not met
+        run: |
+        sonar-scanner-report
+        --format=json
+        --output-file=sonar-report.json
+        id: sonar-report
+      - name: Parse Sonarqube report
+        uses: jbake/json-parse-action@v1.0.1
+        with:
+        json_file: sonar-report.json
+        id: sonar-parsed
+      - name: Fail pipeline if code coverage is below threshold
+        if: ${{ steps.sonar-parsed.outputs.coverage < 80 }}
+        run: exit 1
+      - name: Fail pipeline if number of code smells is above threshold
+        if: ${{ steps.sonar-parsed.outputs.code_smells > 10 }}
+        run: exit 1
+      - name: Fail pipeline if number of vulnerabilities is above threshold
+        if: ${{ steps.sonar-parsed.outputs.vulnerabilities > 5 }}
+        run: exit 1
+      - name: Fail pipeline if number of bugs is above threshold
+        if: ${{ steps.sonar-parsed.outputs.bugs > 3 }}
+        run: exit 1
