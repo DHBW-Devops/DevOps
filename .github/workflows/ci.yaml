@@ -36,7 +36,7 @@ jobs:
   #        az vm start -g Sonarqube-Server_group -n Sonarqube-Server
   use-sonarqube:
     name: Sonarqube
-    needs: start-sonarqube
+    needs: build-and-test #start-sonarqube
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
