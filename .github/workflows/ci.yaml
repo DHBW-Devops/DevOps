@@ -26,14 +26,14 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-and-test
     steps:
-    - uses: actions/checkout@v2
-    - name: Login to Azure
-      uses: azure/login@v2
-      with:
-        creds: ${{ secrets.SONARQUBE_CREDENTIALS }}
-    - name: Start VM
-      run: |
-        az vm start -g Sonarqube-Server_group -n Sonarqube-Server
+      - uses: actions/checkout@v2
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.SONARQUBE_CREDENTIALS }}
+      - name: Start VM
+        run: |
+          az vm start -g Sonarqube-Server_group -n Sonarqube-Server
   use-sonarqube:
     name: Sonarqube
     needs: start-sonarqube
@@ -55,12 +55,12 @@ jobs:
     runs-on: ubuntu-latest
     needs: use-sonarqube
     steps: 
-    - uses: actions/checkout@v2
-    - name: Login to Azure
-      uses: azure/login@v2
-      with:
-        creds: ${{ secrets.SONARQUBE_CREDENTIALS }}
-    - name: Stop VM
-      run: |
-        az vm stop -g Sonarqube-Server_group -n Sonarqube-Server
+      - uses: actions/checkout@v2
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.SONARQUBE_CREDENTIALS }}
+      - name: Stop VM
+        run: |
+          az vm stop -g Sonarqube-Server_group -n Sonarqube-Server
 
